@@ -1,0 +1,411 @@
+/* =========================================================
+   공통: 폰트 / 홀더 / 빈 목록 안내
+   ========================================================= */
+@font-face {
+  font-family: 'Crimson Pro';
+  src: url('https://fonts.gstatic.com/s/crimsonpro/v28/q5uDsoa5M_tv7IihmnkabARboYE.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+ font-family: 'Hahmlet-Regular';
+ src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/Hahmlet-Regular.woff2') format('woff2');
+ font-weight: normal;
+ font-style: normal;
+}
+
+@font-face {
+    font-family: 'Hahmlet-Scaled';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/Hahmlet-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    size-adjust: 81%; /* 한글 폰트 크기만 축소 */
+}
+
+@font-face {
+  font-family: 'UnifrakturMaguntia';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/unifrakturmaguntia/v22/WWXPlieVYwiGNomYU-ciRLRvEmK7oaVemGZM.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* 목차 전체 감싸는 홀더 */
+.fm-toc-holder {
+  margin: 1.5em 0;
+}
+
+/* 빈 목록 안내 */
+.fm-toc-empty {
+  color: var(--text-faint);
+  font-size: 0.88rem;
+  padding: 0.5em 0;
+}
+
+
+/* =========================================================
+   목차 스타일 (배너 + 로마 숫자 + 점선 + 우측 제목)
+   ========================================================= */
+.fm-toc-sketch {
+  margin: 0;
+  /* 점선 시작 위치 = 로마숫자 칸 너비 + 간격
+     소제목(01 ...)도 같은 값에서 시작해서 정확히 세로로 맞는다.
+     (로마숫자 칸 너비는 JS가 대제목 개수에 맞춰 자동 조정) */
+  --fm-toc-roman-w: 2rem;
+  --fm-toc-gap: 0.55rem;
+  --fm-toc-sk-sub-indent: calc(var(--fm-toc-roman-w) + var(--fm-toc-gap));
+}
+
+/* 회색 배너: 글자를 오른쪽 하단으로 정렬 */
+.fm-toc-sk-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;      /* 오른쪽 */
+  justify-content: flex-end;  /* 아래쪽 */
+  text-align: right;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  width: fit-content;
+  min-width: 35%;
+  max-width: 75%;
+  min-height: 4em;
+  padding: 0.9em 1em 0.3em 2.4em;
+  background-color: var(--fm-toc-bg, #8a8a8a);
+  color: var(--fm-toc-fg, #fff);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  line-height: 1.1;
+
+  /* 영문은 Crimson Pro가 먼저, 한글은 축소된 Hahmlet-Scaled가 담당 */
+  font-family: 'Crimson Pro', 'Hahmlet-Scaled', 'Hahmlet-Regular', serif !important;
+
+  /* 미니멀 스타일: 작은 대문자 효과 */
+  font-variant: small-caps !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* 배경 이미지가 있을 때 글자가 잘 보이도록 */
+.fm-toc-sk-banner.has-image {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+}
+
+.fm-toc-sk-banner::-webkit-details-marker {
+  display: none;
+}
+
+.fm-toc-sk-eyebrow {
+  display: block;
+  font-size: 0.9em;
+  margin-bottom: -0.25em;
+}
+
+.fm-toc-sk-heading {
+  display: block;
+  font-size: 1.9em;
+}
+
+/* 본문 */
+.fm-toc-sk-content {
+  padding: 1em 0.4em 0.2em;
+}
+
+/* 대제목 행: Ⅰ ------------ 제목 */
+.fm-toc-sk-major,
+.fm-toc-sk-minor {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.fm-toc-sk-major {
+  display: flex;
+  align-items: baseline;
+  margin: 0.15rem 0 0.15rem;
+}
+
+.fm-toc-sk-major:first-child {
+  margin-top: 0.2rem;
+}
+
+.fm-toc-sk-roman {
+  width: var(--fm-toc-roman-w);
+  flex: none;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* 로마숫자 정렬 (설정 / toc-roman-align) */
+.fm-toc-sketch.roman-left .fm-toc-sk-roman {
+  text-align: left;
+  padding-left: 0.3rem;
+}
+
+.fm-toc-sketch.roman-center .fm-toc-sk-roman {
+  text-align: center;
+}
+
+.fm-toc-sketch.roman-right .fm-toc-sk-roman {
+  text-align: right;
+}
+
+.fm-toc-sk-dots {
+  flex: 1;
+  min-width: 1.5rem;
+  align-self: center;
+  margin: 0 var(--fm-toc-gap);
+  border-bottom: 1px dashed var(--text-muted);
+}
+
+.fm-toc-sk-title {
+  max-width: 60%;
+  text-align: right;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: var(--text-normal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fm-toc-sk-major:hover .fm-toc-sk-title,
+.fm-toc-sk-major:hover .fm-toc-sk-roman {
+  color: var(--text-accent);
+}
+
+/* 소제목 행: 01 작은 소제목 */
+.fm-toc-sk-minor {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  margin: 0.05rem 0;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--text-muted) 98%, transparent);
+}
+
+.fm-toc-sk-subnum {
+  letter-spacing: 0.05em;
+}
+
+.fm-toc-sk-subtitle {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fm-toc-sk-minor:hover {
+  color: var(--text-accent);
+}
+
+/* 모바일: 우측 제목이 너무 좁아지지 않게 */
+@media (max-width: 480px) {
+  .fm-toc-sk-roman { font-size: 1.05rem; }
+  .fm-toc-sk-title { font-size: 0.9rem; max-width: 65%; }
+  .fm-toc-sk-heading { font-size: 1.6em; }
+}
+
+
+/* =========================================================
+   점선 없는 버전 (toc-line: false) — 위키피디아식 목록
+   대제목: Ⅰ  제목   /   소제목: 제목 글자 시작 위치에 맞춰 들여쓰기
+   ========================================================= */
+.fm-toc-sketch.no-line .fm-toc-sk-dots {
+  display: none;
+}
+
+.fm-toc-sketch.no-line .fm-toc-sk-roman {
+  margin-right: var(--fm-toc-gap);
+}
+
+.fm-toc-sketch.no-line .fm-toc-sk-title {
+  flex: 1;
+  min-width: 0;
+  max-width: none;
+  text-align: left;
+}
+
+
+/* =========================================================
+   CONTENTS 글자 버전 (toc-style: text)
+   UnifrakturMaguntia 글씨를 누르면 목차가 펼쳐진다
+   ========================================================= */
+.fm-toc-fk-summary {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+  text-align: center;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  padding: 0 0.2em;
+  font-family: 'UnifrakturMaguntia', 'Hahmlet-Scaled', serif;
+  font-size: 2.1rem;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--text-normal);
+}
+
+.fm-toc-fk-summary::-webkit-details-marker {
+  display: none;
+}
+
+.fm-toc-fk-summary:hover {
+  color: var(--text-accent);
+}
+
+.fm-toc-st-text .fm-toc-sk-content {
+  padding-top: 0.5em;
+}
+
+@media (max-width: 480px) {
+  .fm-toc-fk-summary { font-size: 1.8rem; }
+}
+
+
+/* =========================================================
+   제목 없이 목차만 (toc-style: list)
+   ========================================================= */
+.fm-toc-st-list .fm-toc-sk-content {
+  padding-top: 0.2em;
+}
+
+
+/* =========================================================
+   비스킷 버전 (toc-style: biscuit)
+   비스킷을 누르면 목차가 펼쳐진다 (제목 글자 없음)
+   원본 비율: 가로 320 / 세로 200 / 물결 반지름 20 / 테두리 1.5
+              구멍 반지름 1.5 / 구멍 간격 35 / 구멍 여백 14
+   --fm-bs-scale 로 비율을 유지한 채 전체 크기만 조절한다
+   ========================================================= */
+.fm-toc-biscuit {
+  --s: var(--fm-bs-scale, 0.32);
+  --c: var(--fm-bs-color, #f0cf94);     /* 비스킷 색 */
+  --line: var(--fm-bs-line, #7a4a21);   /* 테두리 및 구멍 색 */
+
+  --w: calc(320px * var(--s));          /* 중간 네모 가로 */
+  --h: calc(200px * var(--s));          /* 중간 네모 세로 */
+  --r: calc(20px * var(--s));           /* 물결(동그라미) 반지름 */
+  --b: max(1px, calc(1.5px * var(--s))); /* 테두리 두께 (너무 얇아지지 않게 최소 1px) */
+  --hole-size: max(0.8px, calc(1.5px * var(--s)));
+  --hole-gap: calc(35px * var(--s));
+  --hole-pad: calc(14px * var(--s));
+
+  display: block;
+  position: relative;
+  box-sizing: content-box;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  width: calc(var(--w) + var(--r) * 2);
+  height: calc(var(--h) + var(--r) * 2);
+  max-width: 100%;
+  margin: 0.2rem 0;
+  transition: filter 0.15s ease;
+
+  /* 1층: 진한 윤곽 (동그라미 + 네모) */
+  background:
+    linear-gradient(var(--line), var(--line)) center / var(--w) var(--h) no-repeat,
+    radial-gradient(circle at center, var(--line) calc(var(--r) - .5px), #0000 var(--r)) top left / calc(var(--r) * 2) calc(var(--r) * 2) repeat-x,
+    radial-gradient(circle at center, var(--line) calc(var(--r) - .5px), #0000 var(--r)) bottom left / calc(var(--r) * 2) calc(var(--r) * 2) repeat-x,
+    radial-gradient(circle at center, var(--line) calc(var(--r) - .5px), #0000 var(--r)) top left / calc(var(--r) * 2) calc(var(--r) * 2) repeat-y,
+    radial-gradient(circle at center, var(--line) calc(var(--r) - .5px), #0000 var(--r)) top right / calc(var(--r) * 2) calc(var(--r) * 2) repeat-y;
+}
+
+.fm-toc-biscuit::-webkit-details-marker {
+  display: none;
+}
+
+.fm-toc-biscuit:hover {
+  filter: brightness(1.05);
+}
+
+/* 2층: 비스킷 색 (테두리 두께만큼 작게) */
+.fm-toc-biscuit::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(var(--c), var(--c)) center / calc(var(--w) - var(--b) * 2) calc(var(--h) - var(--b) * 2) no-repeat,
+    radial-gradient(circle at center, var(--c) calc(var(--r) - var(--b) - .5px), #0000 calc(var(--r) - var(--b))) top left / calc(var(--r) * 2) calc(var(--r) * 2) repeat-x,
+    radial-gradient(circle at center, var(--c) calc(var(--r) - var(--b) - .5px), #0000 calc(var(--r) - var(--b))) bottom left / calc(var(--r) * 2) calc(var(--r) * 2) repeat-x,
+    radial-gradient(circle at center, var(--c) calc(var(--r) - var(--b) - .5px), #0000 calc(var(--r) - var(--b))) top left / calc(var(--r) * 2) calc(var(--r) * 2) repeat-y,
+    radial-gradient(circle at center, var(--c) calc(var(--r) - var(--b) - .5px), #0000 calc(var(--r) - var(--b))) top right / calc(var(--r) * 2) calc(var(--r) * 2) repeat-y;
+}
+
+/* 3층: 과자 구멍 (일정한 간격) */
+.fm-toc-biscuit::after {
+  content: "";
+  position: absolute;
+  inset: calc(var(--r) + var(--hole-pad));
+  background: radial-gradient(circle at center, var(--line) var(--hole-size), #0000 calc(var(--hole-size) + .5px)) center / var(--hole-gap) var(--hole-gap);
+  background-repeat: space;
+}
+
+.fm-toc-st-biscuit .fm-toc-sk-content {
+  padding-top: 0.4em;
+}
+
+
+/* =========================================================
+   제목을 누르면 목차로 돌아가기 (읽기 모드)
+   ========================================================= */
+.fm-toc-back-target {
+  cursor: pointer;
+}
+
+.fm-toc-holder {
+  scroll-margin-top: 1rem;
+}
+
+
+/* =========================================================
+   frontmatter 입력 추천 팝업 / 목차 설정 만들기 모달
+   ========================================================= */
+.fm-toc-sg {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 0.5em;
+}
+
+.fm-toc-sg-swatch {
+  flex: none;
+  width: 0.9em;
+  height: 0.9em;
+  border-radius: 3px;
+  border: 1px solid var(--background-modifier-border);
+}
+
+.fm-toc-sg-label {
+  font-weight: 500;
+}
+
+.fm-toc-sg-desc {
+  flex-basis: 100%;
+  font-size: var(--font-ui-smaller);
+  color: var(--text-muted);
+}
+
+.fm-toc-modal {
+  width: min(560px, 94vw);
+}
+
+.fm-toc-modal-label {
+  margin-top: 1em;
+  font-size: var(--font-ui-smaller);
+  color: var(--text-muted);
+}
+
+.fm-toc-modal-preview {
+  margin-top: 0.3em;
+  padding: 0.4em 0.9em;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-m);
+  max-height: 260px;
+  overflow: auto;
+}

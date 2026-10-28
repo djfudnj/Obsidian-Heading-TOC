@@ -1,0 +1,9 @@
+{
+  "id": "heading-toc",
+  "name": "Heading TOC",
+  "version": "1.0.0",
+  "minAppVersion": "1.4.0",
+  "description": "Show a table of contents at the top of a note. Choose which heading levels to include per note via frontmatter (toc: 4, toc: 3-4).",
+  "author": "nunca",
+  "isDesktopOnly": false
+}
